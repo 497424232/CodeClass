@@ -4,71 +4,56 @@ import java.util.Arrays;
 
 /**
  * 插入排序
- * 熟悉对数器
  */
-public class Code01_SelectionSort {
+public class Code03_InsertSort {
 
-    /**
-     * 插入排序方法
-     * @param arr
-     */
-    public static void selectionSort(int[] arr) {
+
+    public static void insertSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;
         }
 
-        //for (int i = 0; i < arr.length - 1; i++) {
-        for (int i = 0; i < arr.length; i++) {
-
-//            // 最小值在哪个位置上  i～n-1
-//            int minIndex = i;
-//            for (int j = i + 1; j < arr.length; j++) { // i ~ N-1 上找最小值的下标
-//                minIndex = arr[j] < arr[minIndex] ? j : minIndex;
+        // 0~0 有序的
+        // 0~i 想有序
+//        for (int i = 1; i < arr.length; i++) { // 0 ~ i 做到有序
+//            // arr[i]往前看，一直交换到合适的位置停止
+//            // ...(<=)  ?       <- i
+//            for (int j = i - 1; j >= 0 && arr[j] > arr[j + 1]; j--) {
+//                swap(arr, j, j + 1);
 //            }
-//            swap(arr, i, minIndex);
+//        }
 
-            int minIndex = i;
-            for (int j = i; j < arr.length; j++) {
-                minIndex = arr[j] < arr[minIndex] ? j : minIndex;
+        //todo
+        //0~0有序
+        //0~n 变有序
+        for (int i = 1; i < arr.length; i++) {
+            // i 往前看
+            for (int j = 0; j < i; j++) {
+                if (arr[i] < arr[j]) {
+                    swap(arr, i, j);
+                }
             }
-            swap(arr, minIndex, i);
-            //todo 下面方法非选择排序
-//            for (int j = i; j < arr.length; j++) {
-//                if (arr[j] < arr[i]) {
-//                    swap(arr, i, j);
-//                }
-//            }
-        }
+        }       
 
     }
 
     /**
-     * 交换数据两个元素的位置
+     * 此处交换值方式通过 异或 方式交换
      * @param arr
      * @param a
      * @param b
      */
     private static void swap(int[] arr, int a, int b) {
-        int temp = arr[a];
-        arr[a] = arr[b];
-        arr[b] = temp;
+        arr[a] = arr[a] ^ arr[b];
+        arr[b] = arr[a] ^ arr[b];
+        arr[a] = arr[a] ^ arr[b];
     }
 
-    /**
-     * 使用jdk提供的排序方法
-     * @param arr
-     */
     // for test
     public static void comparator(int[] arr) {
         Arrays.sort(arr);
     }
 
-    /**
-     * 生成随机数组
-     * @param maxSize
-     * @param maxValue
-     * @return
-     */
     // for test
     public static int[] generateRandomArray(int maxSize, int maxValue) {
         int[] arr = new int[(int) ((maxSize + 1) * Math.random())];
@@ -78,11 +63,6 @@ public class Code01_SelectionSort {
         return arr;
     }
 
-    /**
-     * 拷贝数组，方便两个方法比较
-     * @param arr
-     * @return
-     */
     // for test
     public static int[] copyArray(int[] arr) {
         if (arr == null) {
@@ -127,6 +107,7 @@ public class Code01_SelectionSort {
 
     // for test
     public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
         int testTime = 500000;
         int maxSize = 100;
         int maxValue = 100;
@@ -134,12 +115,10 @@ public class Code01_SelectionSort {
         for (int i = 0; i < testTime; i++) {
             int[] arr1 = generateRandomArray(maxSize, maxValue);
             int[] arr2 = copyArray(arr1);
-            selectionSort(arr1);
+            insertSort(arr1);
             comparator(arr2);
             if (!isEqual(arr1, arr2)) {
                 succeed = false;
-                printArray(arr1);
-                printArray(arr2);
                 break;
             }
         }
@@ -147,7 +126,14 @@ public class Code01_SelectionSort {
 
         int[] arr = generateRandomArray(maxSize, maxValue);
         printArray(arr);
-        selectionSort(arr);
+        insertSort(arr);
         printArray(arr);
+
+        long endTime = System.currentTimeMillis();
+
+        System.out.println("time:" + (endTime - startTime));
     }
+
+
+
 }

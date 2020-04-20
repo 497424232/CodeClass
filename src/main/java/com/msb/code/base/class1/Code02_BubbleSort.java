@@ -3,72 +3,50 @@ package com.msb.code.base.class1;
 import java.util.Arrays;
 
 /**
- * 插入排序
- * 熟悉对数器
+ * 冒泡算法
  */
-public class Code01_SelectionSort {
+public class Code02_BubbleSort {
 
-    /**
-     * 插入排序方法
-     * @param arr
-     */
-    public static void selectionSort(int[] arr) {
+    public static void bubbleSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;
         }
 
-        //for (int i = 0; i < arr.length - 1; i++) {
-        for (int i = 0; i < arr.length; i++) {
-
-//            // 最小值在哪个位置上  i～n-1
-//            int minIndex = i;
-//            for (int j = i + 1; j < arr.length; j++) { // i ~ N-1 上找最小值的下标
-//                minIndex = arr[j] < arr[minIndex] ? j : minIndex;
-//            }
-//            swap(arr, i, minIndex);
-
-            int minIndex = i;
-            for (int j = i; j < arr.length; j++) {
-                minIndex = arr[j] < arr[minIndex] ? j : minIndex;
+        for (int e = arr.length - 1; e > 0; e--) { // 0 ~ e
+            for (int i = 0; i < e; i++) {
+                if (arr[i] > arr[i + 1]) {
+                    swap(arr, i, i + 1);
+                }
             }
-            swap(arr, minIndex, i);
-            //todo 下面方法非选择排序
-//            for (int j = i; j < arr.length; j++) {
-//                if (arr[j] < arr[i]) {
-//                    swap(arr, i, j);
-//                }
-//            }
         }
 
+        //todo 外层遍历使用 e-- 方式遍历，减少了循环次数 (500000次测试时间多消耗1秒左右)
+//        for (int i = 0; i < arr.length; i++) {
+//            for (int j = 0; j < arr.length - 1; j++) {
+//                if (arr[j + 1] < arr[j] ) {
+//                    swap(arr, j + 1, j);
+//                }
+//            }
+//        }
     }
 
     /**
-     * 交换数据两个元素的位置
+     * 此处交换值方式通过 异或 方式交换
      * @param arr
      * @param a
      * @param b
      */
     private static void swap(int[] arr, int a, int b) {
-        int temp = arr[a];
-        arr[a] = arr[b];
-        arr[b] = temp;
+        arr[a] = arr[a] ^ arr[b];
+        arr[b] = arr[a] ^ arr[b];
+        arr[a] = arr[a] ^ arr[b];
     }
 
-    /**
-     * 使用jdk提供的排序方法
-     * @param arr
-     */
     // for test
     public static void comparator(int[] arr) {
         Arrays.sort(arr);
     }
 
-    /**
-     * 生成随机数组
-     * @param maxSize
-     * @param maxValue
-     * @return
-     */
     // for test
     public static int[] generateRandomArray(int maxSize, int maxValue) {
         int[] arr = new int[(int) ((maxSize + 1) * Math.random())];
@@ -78,11 +56,6 @@ public class Code01_SelectionSort {
         return arr;
     }
 
-    /**
-     * 拷贝数组，方便两个方法比较
-     * @param arr
-     * @return
-     */
     // for test
     public static int[] copyArray(int[] arr) {
         if (arr == null) {
@@ -127,6 +100,7 @@ public class Code01_SelectionSort {
 
     // for test
     public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
         int testTime = 500000;
         int maxSize = 100;
         int maxValue = 100;
@@ -134,12 +108,10 @@ public class Code01_SelectionSort {
         for (int i = 0; i < testTime; i++) {
             int[] arr1 = generateRandomArray(maxSize, maxValue);
             int[] arr2 = copyArray(arr1);
-            selectionSort(arr1);
+            bubbleSort(arr1);
             comparator(arr2);
             if (!isEqual(arr1, arr2)) {
                 succeed = false;
-                printArray(arr1);
-                printArray(arr2);
                 break;
             }
         }
@@ -147,7 +119,13 @@ public class Code01_SelectionSort {
 
         int[] arr = generateRandomArray(maxSize, maxValue);
         printArray(arr);
-        selectionSort(arr);
+        bubbleSort(arr);
         printArray(arr);
+
+        long endTime = System.currentTimeMillis();
+
+        System.out.println("time:" + (endTime - startTime));
     }
+
+
 }
