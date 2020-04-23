@@ -67,6 +67,11 @@ public class Code07_EvenTimesOddTimes {
 //    }
 
 
+    /**
+     * 查看一个整数中 用二进制表示一共有多少个 1
+     * @param N
+     * @return
+     */
     public static int bit1counts(int N) {
         int count = 0;
 
@@ -79,9 +84,13 @@ public class Code07_EvenTimesOddTimes {
 
 
         while(N != 0) {
+            // 取这个数的右侧第一个 1
             int rightOne = N & ((~N) + 1);
             count++;
+            // 异或方式抹掉最后一个1
             N ^= rightOne;
+
+            // 下面这个方法负数不试用
             // N -= rightOne
         }
 
