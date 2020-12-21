@@ -7,7 +7,8 @@ public class HeapSortTest {
 
 
     public static void heapSort(int[] arr) {
-        if (arr == null || arr.length == 1) {
+        // 判断条件为 <= 1 arr值不能为空
+        if (arr == null || arr.length <= 1) {
             return;
         }
         for (int i = 0; i < arr.length; i++) {
@@ -21,7 +22,13 @@ public class HeapSortTest {
 
         int heapSize = arr.length;
         heapSize --;
-        swap(arr, 0, heapSize);
+        try {
+            swap(arr, 0, heapSize);
+
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            System.out.println("error:" );
+            printArray(arr);
+        }
         heapIfy(arr, 0, heapSize);
         while (heapSize > 0) {
             heapSize --;
@@ -61,7 +68,10 @@ public class HeapSortTest {
         while (left < heapSize) {
             // 拿到子节点中较大的数，交换位置
             int right = left + 1;
-            int largeIndex = right > heapSize ? (arr[right] > arr[left] ? right : left) : left;
+            // 此处判断有误，
+//            int largeIndex = right > heapSize ? (arr[right] > arr[left] ? right : left) : left;
+            // 在右孩子小于堆size 并且有孩子大于左孩子时
+            int largeIndex = right < heapSize && arr[right] > arr[left] ? right : left;
 
             if (arr[index] >= arr[largeIndex]) {
                 break;
@@ -157,25 +167,27 @@ public class HeapSortTest {
             System.out.println(heap.poll());
         }
 
-        int[] arr = new int[]{1, -5, -6, 1, -4 };
-        heapSort(arr);
+        int[] arrtest = new int[]{2, 2, 5, 0, -4, -3, -1 };
+        heapSort(arrtest);
 
-//        int testTime = 500000;
-//        int maxSize = 10;
-//        int maxValue = 10;
-//        boolean succeed = true;
-//        for (int i = 0; i < testTime; i++) {
-//            int[] arr1 = generateRandomArray(maxSize, maxValue);
-//            int[] arr2 = copyArray(arr1);
-//            heapSort(arr1);
-//            comparator(arr2);
-//            if (!isEqual(arr1, arr2)) {
-//                succeed = false;
-//                break;
-//            }
-//        }
-//        System.out.println(succeed ? "Nice!" : "Fucking fucked!");
-//
+        int testTime = 500000;
+        int maxSize = 100;
+        int maxValue = 100;
+        boolean succeed = true;
+        for (int i = 0; i < testTime; i++) {
+            int[] arr = generateRandomArray(maxSize, maxValue);
+            int[] arr1 = copyArray(arr);
+            int[] arr2 = copyArray(arr1);
+            heapSort(arr1);
+            comparator(arr2);
+            if (!isEqual(arr1, arr2)) {
+                succeed = false;
+                printArray(arr);
+                break;
+            }
+        }
+        System.out.println(succeed ? "Nice!" : "Fucking fucked!");
+
 //        int[] arr = generateRandomArray(maxSize, maxValue);
 //        printArray(arr);
 //        heapSort(arr);
